@@ -41,5 +41,27 @@ namespace ASP_REST_API_CRUD.Controllers
 
             return Ok(contact);
         }
+
+        [HttpPut]
+        [Route("{id:guid}")]
+        //Update contact
+        public async Task<IActionResult> UpdateContact([FromRoute] Guid id, UpdateContactRequest updateContactRequest)
+        {
+            var contact = await dbContext.Contacts.FindAsync(id);
+
+            if (contact != null)
+            {
+                contact.FullName = updateContactRequest.FullName;
+                contact.Email = updateContactRequest.Email;
+                contact.Phone = updateContactRequest.Phone;
+                contact.Address= updateContactRequest.Address;
+
+                await dbContext.SaveChangesAsync();
+
+                return Ok(contact);
+            }
+
+            return NotFound();
+        }
     }
 }
