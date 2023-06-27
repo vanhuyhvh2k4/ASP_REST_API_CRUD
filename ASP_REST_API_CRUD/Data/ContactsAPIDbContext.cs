@@ -1,6 +1,14 @@
-﻿namespace ASP_REST_API_CRUD.Data
+﻿using ASP_REST_API_CRUD.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace ASP_REST_API_CRUD.Data
 {
-    public class ContactAPI
+    public class ContactsAPIDbContext : DbContext
     {
+        public ContactsAPIDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DbSet<Contact> Contacts { get; set; }
     }
 }
