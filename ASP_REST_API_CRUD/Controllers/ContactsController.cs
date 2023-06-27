@@ -23,6 +23,21 @@ namespace ASP_REST_API_CRUD.Controllers
             return Ok(await dbContext.Contacts.ToListAsync());
         }
 
+        [HttpGet]
+        [Route("{id}:guid")]
+        // Get a contact by Id
+        public async Task<IActionResult> GetContact([FromRoute] Guid id)
+        {
+            var contact = await dbContext.Contacts.FindAsync(id);
+
+            if (contact != null)
+            {
+                return Ok(contact);            
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         //Add a new contact
         public async Task<IActionResult> AddContact(AddContactRequest addContactRequest)
@@ -56,6 +71,23 @@ namespace ASP_REST_API_CRUD.Controllers
                 contact.Phone = updateContactRequest.Phone;
                 contact.Address= updateContactRequest.Address;
 
+                await dbContext.SaveChangesAsync();
+
+                return Ok(contact);
+            }
+
+            return NotFound();
+        }
+
+        [HttpDelete]
+        [Route("{id}:guid")]
+        public async Task<IActionResult> DeleteContact([FromRoute] Guid id)
+        {
+            var contact = await dbContext.Contacts.FindAsync(id);
+
+            if (contact != null)
+            {
+                dbContext.Remove(contact);
                 await dbContext.SaveChangesAsync();
 
                 return Ok(contact);
